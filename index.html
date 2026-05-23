@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Life Dashboard</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- ── GREETING ── -->
+    <header class="greeting-section">
+      <div class="greeting-inner">
+        <p id="greeting-text" class="greeting-text">Good morning!</p>
+        <p id="current-time" class="current-time">00:00:00</p>
+        <p id="current-date" class="current-date">Loading…</p>
+      </div>
+    </header>
+
+    <main class="dashboard">
+
+      <!-- ── FOCUS TIMER ── -->
+      <section class="card timer-card" aria-label="Focus Timer">
+        <h2 class="card-title">Focus Timer</h2>
+        <div class="timer-display" id="timer-display">25:00</div>
+        <div class="timer-controls">
+          <button class="btn btn-primary" id="timer-start">Start</button>
+          <button class="btn btn-secondary" id="timer-stop">Stop</button>
+          <button class="btn btn-ghost" id="timer-reset">Reset</button>
+        </div>
+        <p class="timer-label" id="timer-label">Ready to focus?</p>
+      </section>
+
+      <!-- ── TO-DO LIST ── -->
+      <section class="card todo-card" aria-label="To-Do List">
+        <h2 class="card-title">To-Do List</h2>
+
+        <form class="todo-form" id="todo-form" autocomplete="off">
+          <input
+            type="text"
+            id="todo-input"
+            class="todo-input"
+            placeholder="Add a new task…"
+            maxlength="120"
+            aria-label="New task"
+          />
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+
+        <ul class="todo-list" id="todo-list" aria-live="polite"></ul>
+
+        <p class="todo-empty" id="todo-empty">No tasks yet. Add one above!</p>
+      </section>
+
+      <!-- ── QUICK LINKS ── -->
+      <section class="card links-card" aria-label="Quick Links">
+        <h2 class="card-title">Quick Links</h2>
+
+        <form class="link-form" id="link-form" autocomplete="off">
+          <input
+            type="text"
+            id="link-name"
+            class="link-input"
+            placeholder="Label (e.g. GitHub)"
+            maxlength="30"
+            aria-label="Link label"
+          />
+          <input
+            type="url"
+            id="link-url"
+            class="link-input"
+            placeholder="https://example.com"
+            aria-label="Link URL"
+          />
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+
+        <div class="links-grid" id="links-grid" aria-live="polite"></div>
+
+        <p class="links-empty" id="links-empty">No links saved yet.</p>
+      </section>
+
+    </main>
+
+    <!-- ── EDIT TASK MODAL ── -->
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-label="Edit task" hidden>
+      <div class="modal">
+        <h3 class="modal-title">Edit Task</h3>
+        <input type="text" id="modal-input" class="todo-input" maxlength="120" aria-label="Edit task text" />
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="modal-save">Save</button>
+          <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
