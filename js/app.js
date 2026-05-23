@@ -76,15 +76,16 @@ function clamp(val, min, max) {
    ============================================================ */
 
 (function initGreeting() {
-  const STORAGE_KEY  = 'dashboard_name';
-  const timeEl       = $('current-time');
-  const dateEl       = $('current-date');
-  const greetEl      = $('greeting-text');
-  const nameDisplay  = $('name-display');
-  const nameEditBtn  = $('name-edit-btn');
-  const nameForm     = $('name-form');
-  const nameInput    = $('name-input');
-  const nameCancel   = $('name-cancel');
+  const STORAGE_KEY = 'dashboard_name';
+  const timeEl      = $('current-time');
+  const dateEl      = $('current-date');
+  const greetEl     = $('greeting-text');
+  const profileBtn  = $('profile-btn');
+  const profileAvatar = $('profile-avatar');
+  const popover     = $('profile-popover');
+  const nameForm    = $('name-form');
+  const nameInput   = $('name-input');
+  const nameCancel  = $('name-cancel');
 
   const GREETINGS = [
     { from:  0, to:  5,  text: 'Burning the midnight oil 🌙' },
@@ -105,14 +106,26 @@ function clamp(val, min, max) {
     return base.replace(/([\u{1F300}-\u{1FFFF}]|\s*$)/u, `, ${userName} $1`);
   }
 
-  /** Update name display below clock */
-  function renderName() {
+  /**
+   * Update profile button avatar:
+   * - Shows first 2 initials when name is set
+   * - Falls back to 👤 emoji when no name
+   */
+  function renderAvatar() {
     if (userName) {
-      nameDisplay.textContent = `👤 ${userName}`;
-      nameEditBtn.title = 'Change name';
+      const initials = userName
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((w) => w[0].toUpperCase())
+        .join('');
+      profileAvatar.textContent = initials;
+      profileBtn.title = `${userName} — click to edit`;
+      profileBtn.setAttribute('aria-label', `Edit name: ${userName}`);
     } else {
-      nameDisplay.textContent = 'Set your name';
-      nameEditBtn.title = 'Add your name';
+      profileAvatar.textContent = '👤';
+      profileBtn.title = 'Set your name';
+      profileBtn.setAttribute('aria-label', 'Set your name');
     }
   }
 
@@ -130,29 +143,48 @@ function clamp(val, min, max) {
     greetEl.textContent = greetingText(h);
   }
 
-  /* ── Name edit UI ── */
-  nameEditBtn.addEventListener('click', () => {
-    nameInput.value = userName;
-    nameForm.hidden = false;
+  /* ── Popover open/close ── */
+  function openPopover() {
+    nameInput.value  = userName;
+    popover.hidden   = false;
     nameInput.focus();
     nameInput.select();
+  }
+
+  function closePopover() {
+    popover.hidden = true;
+  }
+
+  profileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    popover.hidden ? openPopover() : closePopover();
   });
 
-  nameCancel.addEventListener('click', () => {
-    nameForm.hidden = true;
+  nameCancel.addEventListener('click', closePopover);
+
+  // Click outside popover → close
+  document.addEventListener('click', (e) => {
+    if (!popover.hidden && !$('profile-wrap').contains(e.target)) {
+      closePopover();
+    }
+  });
+
+  // Escape key → close
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !popover.hidden) closePopover();
   });
 
   nameForm.addEventListener('submit', (e) => {
     e.preventDefault();
     userName = nameInput.value.trim();
     localStorage.setItem(STORAGE_KEY, userName);
-    nameForm.hidden = true;
-    renderName();
+    closePopover();
+    renderAvatar();
     tick(); // refresh greeting immediately
   });
 
   /* ── Init ── */
-  renderName();
+  renderAvatar();
   tick();
   setInterval(tick, 1000);
 })();

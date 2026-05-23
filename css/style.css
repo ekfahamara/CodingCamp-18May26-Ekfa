@@ -138,52 +138,18 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* ── Name row ── */
-.name-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-}
-
-.name-display {
-  font-size: 0.95rem;
-  color: var(--clr-muted);
-  font-style: italic;
-}
-
-.name-form {
-  display: inline-flex;
+/* ── Header action buttons (profile + theme) ── */
+.header-actions {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.6rem;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
-.name-input {
-  background: var(--clr-surface2);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-sm);
-  color: var(--clr-text);
-  font-family: var(--font);
-  font-size: 0.9rem;
-  padding: 0.45rem 0.8rem;
-  outline: none;
-  width: 180px;
-  transition: border-color var(--transition), box-shadow var(--transition);
-}
-
-.name-input:focus {
-  border-color: var(--clr-primary);
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
-}
-
-/* ── Theme toggle ── */
-.theme-toggle {
-  position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+/* Shared style for both icon buttons */
+.header-btn {
   background: var(--clr-surface2);
   border: 1px solid var(--clr-border);
   border-radius: 99px;
@@ -195,11 +161,83 @@ body {
   align-items: center;
   justify-content: center;
   transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  color: var(--clr-text);
+  flex-shrink: 0;
 }
 
-.theme-toggle:hover {
-  background: var(--clr-border);
-  transform: rotate(20deg);
+.header-btn:hover { background: var(--clr-border); }
+
+.theme-toggle:hover { transform: rotate(20deg); }
+
+/* Profile avatar — shows initials when name set */
+.profile-avatar {
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Profile popover wrapper — relative anchor */
+.profile-wrap {
+  position: relative;
+}
+
+/* Popover card */
+.profile-popover {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  width: 240px;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  z-index: 150;
+  animation: popIn 0.15s ease;
+}
+
+.profile-popover[hidden] { display: none; }
+
+.popover-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--clr-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.6rem;
+}
+
+.popover-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.popover-input {
+  width: 100%;
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.popover-input:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.popover-input::placeholder { color: var(--clr-muted); }
+
+.popover-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
 
 /* ============================================================
@@ -688,5 +726,7 @@ body {
   .todo-form          { flex-direction: column; }
   .timer-controls     { gap: 0.5rem; }
   .settings-grid      { grid-template-columns: 1fr; }
-  .theme-toggle       { top: 0.75rem; right: 0.75rem; width: 34px; height: 34px; font-size: 1rem; }
+  .header-actions     { top: 0.75rem; right: 0.75rem; gap: 0.4rem; }
+  .header-btn         { width: 34px; height: 34px; font-size: 1rem; }
+  .profile-popover    { width: 210px; }
 }

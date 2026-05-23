@@ -17,21 +17,34 @@
         <p id="greeting-text" class="greeting-text">Good morning!</p>
         <p id="current-time" class="current-time">00:00:00</p>
         <p id="current-date" class="current-date">Loading…</p>
-
-        <!-- Name edit row -->
-        <div class="name-row" id="name-display-row">
-          <span id="name-display" class="name-display"></span>
-          <button class="btn-icon" id="name-edit-btn" title="Change name" aria-label="Edit your name">✏️</button>
-        </div>
-        <form class="name-form" id="name-form" hidden autocomplete="off">
-          <input type="text" id="name-input" class="name-input" placeholder="Your name…" maxlength="40" aria-label="Enter your name" />
-          <button type="submit" class="btn btn-primary btn-sm">Save</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="name-cancel">Cancel</button>
-        </form>
       </div>
 
-      <!-- Theme toggle -->
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
+      <!-- Header action buttons: profile + theme toggle -->
+      <div class="header-actions">
+
+        <!-- Profile icon + popover -->
+        <div class="profile-wrap" id="profile-wrap">
+          <button class="header-btn profile-btn" id="profile-btn" aria-label="Edit your name" title="Set your name">
+            <span id="profile-avatar" class="profile-avatar">👤</span>
+          </button>
+
+          <!-- Popover -->
+          <div class="profile-popover" id="profile-popover" hidden role="dialog" aria-label="Edit name">
+            <p class="popover-label">Your name</p>
+            <form id="name-form" autocomplete="off" class="popover-form">
+              <input type="text" id="name-input" class="popover-input" placeholder="Enter your name…" maxlength="40" aria-label="Your name" />
+              <div class="popover-actions">
+                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                <button type="button" class="btn btn-ghost btn-sm" id="name-cancel">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Theme toggle -->
+        <button class="header-btn theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
+
+      </div>
     </header>
 
     <main class="dashboard">
