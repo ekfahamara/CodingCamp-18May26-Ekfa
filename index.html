@@ -24,9 +24,12 @@
 
         <!-- Profile icon + popover -->
         <div class="profile-wrap" id="profile-wrap">
-          <button class="header-btn profile-btn" id="profile-btn" aria-label="Edit your name" title="Set your name">
-            <span id="profile-avatar" class="profile-avatar">👤</span>
-          </button>
+          <div class="profile-trigger" id="profile-trigger">
+            <span id="profile-username" class="profile-username"></span>
+            <button class="header-btn profile-btn" id="profile-btn" aria-label="Edit your name" title="Set your name">
+              <span id="profile-avatar" class="profile-avatar">👤</span>
+            </button>
+          </div>
 
           <!-- Popover -->
           <div class="profile-popover" id="profile-popover" hidden role="dialog" aria-label="Edit name">

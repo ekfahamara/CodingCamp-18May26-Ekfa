@@ -80,37 +80,39 @@ function clamp(val, min, max) {
   const timeEl      = $('current-time');
   const dateEl      = $('current-date');
   const greetEl     = $('greeting-text');
-  const profileBtn  = $('profile-btn');
-  const profileAvatar = $('profile-avatar');
-  const popover     = $('profile-popover');
+  const profileBtn      = $('profile-btn');
+  const profileAvatar   = $('profile-avatar');
+  const profileUsername = $('profile-username');
+  const popover         = $('profile-popover');
+  const profileTrigger  = $('profile-trigger');
   const nameForm    = $('name-form');
   const nameInput   = $('name-input');
   const nameCancel  = $('name-cancel');
 
+  // Each entry: label shown after "Hi, {name}! " or alone when no name
   const GREETINGS = [
-    { from:  0, to:  5,  text: 'Burning the midnight oil 🌙' },
-    { from:  5, to: 12,  text: 'Good morning ☀️' },
-    { from: 12, to: 17,  text: 'Good afternoon 🌤️' },
-    { from: 17, to: 21,  text: 'Good evening 🌆' },
-    { from: 21, to: 24,  text: 'Good night 🌙' },
+    { from:  0, to:  5,  label: 'Burning the midnight oil', emoji: '🌙' },
+    { from:  5, to: 12,  label: 'Good Morning',             emoji: '☀️'  },
+    { from: 12, to: 17,  label: 'Good Afternoon',           emoji: '🌤️' },
+    { from: 17, to: 21,  label: 'Good Evening',             emoji: '🌆' },
+    { from: 21, to: 24,  label: 'Good Night',               emoji: '🌙' },
   ];
 
   let userName = localStorage.getItem(STORAGE_KEY) || '';
 
-  /** Build greeting string, optionally with name */
+  /**
+   * Build greeting string.
+   * With name:    "Hi, Ekfa! Good Morning ☀️"
+   * Without name: "Good Morning ☀️"
+   */
   function greetingText(hour) {
-    const match = GREETINGS.find((g) => hour >= g.from && hour < g.to);
-    const base  = match ? match.text : 'Hello!';
-    if (!userName) return base;
-    // Insert name before emoji: "Good morning, Alex ☀️"
-    return base.replace(/([\u{1F300}-\u{1FFFF}]|\s*$)/u, `, ${userName} $1`);
+    const match = GREETINGS.find((g) => hour >= g.from && hour < g.to)
+                  || GREETINGS[1]; // fallback
+    const phrase = `${match.label} ${match.emoji}`;
+    return userName ? `Hi, ${userName}! ${phrase}` : phrase;
   }
 
-  /**
-   * Update profile button avatar:
-   * - Shows first 2 initials when name is set
-   * - Falls back to 👤 emoji when no name
-   */
+  /** Profile button avatar */
   function renderAvatar() {
     if (userName) {
       const initials = userName
@@ -119,11 +121,15 @@ function clamp(val, min, max) {
         .slice(0, 2)
         .map((w) => w[0].toUpperCase())
         .join('');
-      profileAvatar.textContent = initials;
+      profileAvatar.textContent         = initials;
+      profileUsername.textContent       = userName;
+      profileUsername.style.display     = 'block';
       profileBtn.title = `${userName} — click to edit`;
       profileBtn.setAttribute('aria-label', `Edit name: ${userName}`);
     } else {
-      profileAvatar.textContent = '👤';
+      profileAvatar.textContent         = '👤';
+      profileUsername.textContent       = '';
+      profileUsername.style.display     = 'none';
       profileBtn.title = 'Set your name';
       profileBtn.setAttribute('aria-label', 'Set your name');
     }
@@ -155,7 +161,7 @@ function clamp(val, min, max) {
     popover.hidden = true;
   }
 
-  profileBtn.addEventListener('click', (e) => {
+  profileTrigger.addEventListener('click', (e) => {
     e.stopPropagation();
     popover.hidden ? openPopover() : closePopover();
   });
