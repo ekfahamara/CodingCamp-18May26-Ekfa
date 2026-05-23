@@ -7,7 +7,9 @@
   padding: 0;
 }
 
-:root {
+/* ── Dark theme (default) ── */
+:root,
+[data-theme="dark"] {
   --clr-bg:        #0f1117;
   --clr-surface:   #1a1d27;
   --clr-surface2:  #22263a;
@@ -19,19 +21,40 @@
   --clr-text:      #e2e8f0;
   --clr-muted:     #8892a4;
   --clr-done:      #4a5568;
+  --clr-header-bg: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+  --clr-toast-bg:  #22263a;
+  --shadow:        0 4px 24px rgba(0, 0, 0, 0.4);
+}
 
+/* ── Light theme ── */
+[data-theme="light"] {
+  --clr-bg:        #f0f2f8;
+  --clr-surface:   #ffffff;
+  --clr-surface2:  #eef0f7;
+  --clr-border:    #d0d5e8;
+  --clr-primary:   #6c63ff;
+  --clr-primary-h: #5a52e0;
+  --clr-accent:    #e8365d;
+  --clr-success:   #1fa882;
+  --clr-text:      #1a1d2e;
+  --clr-muted:     #6b7280;
+  --clr-done:      #9ca3af;
+  --clr-header-bg: linear-gradient(135deg, #e8eaf6 0%, #dde1f5 100%);
+  --clr-toast-bg:  #ffffff;
+  --shadow:        0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Shared tokens ── */
+:root {
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
-
-  --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-
   --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --transition: 0.2s ease;
 }
 
 /* ============================================================
-   BASE
+   BASE — smooth theme transition
    ============================================================ */
 html { scroll-behavior: smooth; }
 
@@ -41,16 +64,50 @@ body {
   color: var(--clr-text);
   min-height: 100vh;
   line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
 }
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(120%);
+  background: var(--clr-toast-bg);
+  color: var(--clr-text);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: var(--shadow);
+  z-index: 200;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast.toast-error  { border-color: var(--clr-accent);  color: var(--clr-accent); }
+.toast.toast-success{ border-color: var(--clr-success); color: var(--clr-success); }
 
 /* ============================================================
    GREETING HEADER
    ============================================================ */
 .greeting-section {
-  background: linear-gradient(135deg, #1a1d27 0%, #12152a 100%);
+  background: var(--clr-header-bg);
   border-bottom: 1px solid var(--clr-border);
   padding: 2.5rem 2rem 2rem;
   text-align: center;
+  position: relative;
+  transition: background var(--transition), border-color var(--transition);
 }
 
 .greeting-inner {
@@ -61,7 +118,7 @@ body {
 .greeting-text {
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 700;
-  color: var(--clr-primary-h);
+  color: var(--clr-primary);
   letter-spacing: -0.02em;
 }
 
@@ -79,6 +136,70 @@ body {
   font-size: 1rem;
   color: var(--clr-muted);
   letter-spacing: 0.04em;
+}
+
+/* ── Name row ── */
+.name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.name-display {
+  font-size: 0.95rem;
+  color: var(--clr-muted);
+  font-style: italic;
+}
+
+.name-form {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.name-input {
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 0.45rem 0.8rem;
+  outline: none;
+  width: 180px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.name-input:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+/* ── Theme toggle ── */
+.theme-toggle {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  border-radius: 99px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--clr-border);
+  transform: rotate(20deg);
 }
 
 /* ============================================================
@@ -105,6 +226,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .card-title {
@@ -135,12 +263,11 @@ body {
   white-space: nowrap;
 }
 
+.btn.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.82rem; }
+
 .btn:active { transform: scale(0.96); }
 
-.btn-primary {
-  background: var(--clr-primary);
-  color: #fff;
-}
+.btn-primary { background: var(--clr-primary); color: #fff; }
 .btn-primary:hover { background: var(--clr-primary-h); }
 
 .btn-secondary {
@@ -183,7 +310,7 @@ body {
   font-size: 0.95rem;
   padding: 0.6rem 0.9rem;
   outline: none;
-  transition: border-color var(--transition), box-shadow var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
 }
 
 .todo-input:focus,
@@ -200,6 +327,35 @@ body {
    ============================================================ */
 .timer-card { align-items: center; text-align: center; }
 
+/* Mode tabs */
+.timer-tabs {
+  display: flex;
+  gap: 0.4rem;
+  background: var(--clr-surface2);
+  border-radius: var(--radius-md);
+  padding: 0.3rem;
+}
+
+.timer-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--clr-muted);
+  font-family: var(--font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.timer-tab.active {
+  background: var(--clr-surface);
+  color: var(--clr-text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
 .timer-display {
   font-size: clamp(3.5rem, 10vw, 5.5rem);
   font-weight: 800;
@@ -207,6 +363,7 @@ body {
   color: var(--clr-text);
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  transition: color var(--transition);
 }
 
 .timer-display.running { color: var(--clr-success); }
@@ -225,6 +382,62 @@ body {
   min-height: 1.2em;
 }
 
+/* Timer settings panel */
+.timer-settings {
+  width: 100%;
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: left;
+}
+
+.settings-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--clr-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.75rem;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.settings-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--clr-muted);
+  font-weight: 600;
+}
+
+.settings-input {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+  outline: none;
+  width: 100%;
+  transition: border-color var(--transition);
+}
+
+.settings-input:focus { border-color: var(--clr-primary); }
+
+.settings-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
 /* ============================================================
    TO-DO LIST
    ============================================================ */
@@ -232,6 +445,36 @@ body {
   display: flex;
   gap: 0.6rem;
 }
+
+/* Sort row */
+.sort-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sort-label {
+  font-size: 0.82rem;
+  color: var(--clr-muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sort-select {
+  flex: 1;
+  background: var(--clr-surface2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-sm);
+  color: var(--clr-text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+}
+
+.sort-select:focus { border-color: var(--clr-primary); }
 
 .todo-list {
   list-style: none;
@@ -256,7 +499,7 @@ body {
   border: 1px solid var(--clr-border);
   border-radius: var(--radius-sm);
   padding: 0.6rem 0.75rem;
-  transition: border-color var(--transition), opacity var(--transition);
+  transition: border-color var(--transition), opacity var(--transition), background var(--transition);
   animation: slideIn 0.18s ease;
 }
 
@@ -359,14 +602,14 @@ body {
   font-size: 0.88rem;
   color: var(--clr-text);
   text-decoration: none;
-  transition: border-color var(--transition), background var(--transition);
+  transition: border-color var(--transition), background var(--transition), color var(--transition);
   max-width: 200px;
 }
 
 .link-chip:hover {
   border-color: var(--clr-primary);
   background: var(--clr-surface);
-  color: var(--clr-primary-h);
+  color: var(--clr-primary);
 }
 
 .link-chip span {
@@ -429,10 +672,7 @@ body {
   to   { transform: scale(1);    opacity: 1; }
 }
 
-.modal-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-}
+.modal-title { font-size: 1.1rem; font-weight: 700; }
 
 .modal-actions {
   display: flex;
@@ -444,15 +684,9 @@ body {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 600px) {
-  .link-form {
-    grid-template-columns: 1fr;
-  }
-
-  .todo-form {
-    flex-direction: column;
-  }
-
-  .timer-controls {
-    gap: 0.5rem;
-  }
+  .link-form          { grid-template-columns: 1fr; }
+  .todo-form          { flex-direction: column; }
+  .timer-controls     { gap: 0.5rem; }
+  .settings-grid      { grid-template-columns: 1fr; }
+  .theme-toggle       { top: 0.75rem; right: 0.75rem; width: 34px; height: 34px; font-size: 1rem; }
 }

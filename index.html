@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,27 +7,76 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
+
+    <!-- ── TOAST ── -->
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
     <!-- ── GREETING ── -->
     <header class="greeting-section">
       <div class="greeting-inner">
         <p id="greeting-text" class="greeting-text">Good morning!</p>
         <p id="current-time" class="current-time">00:00:00</p>
         <p id="current-date" class="current-date">Loading…</p>
+
+        <!-- Name edit row -->
+        <div class="name-row" id="name-display-row">
+          <span id="name-display" class="name-display"></span>
+          <button class="btn-icon" id="name-edit-btn" title="Change name" aria-label="Edit your name">✏️</button>
+        </div>
+        <form class="name-form" id="name-form" hidden autocomplete="off">
+          <input type="text" id="name-input" class="name-input" placeholder="Your name…" maxlength="40" aria-label="Enter your name" />
+          <button type="submit" class="btn btn-primary btn-sm">Save</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="name-cancel">Cancel</button>
+        </form>
       </div>
+
+      <!-- Theme toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode" title="Toggle theme">🌙</button>
     </header>
 
     <main class="dashboard">
 
       <!-- ── FOCUS TIMER ── -->
       <section class="card timer-card" aria-label="Focus Timer">
-        <h2 class="card-title">Focus Timer</h2>
+        <div class="card-header">
+          <h2 class="card-title">Focus Timer</h2>
+          <button class="btn-icon" id="timer-settings-btn" title="Timer settings" aria-label="Open timer settings">⚙️</button>
+        </div>
+
+        <!-- Mode tabs -->
+        <div class="timer-tabs" role="tablist">
+          <button class="timer-tab active" data-mode="focus"       role="tab" aria-selected="true">Focus</button>
+          <button class="timer-tab"        data-mode="short-break" role="tab" aria-selected="false">Short Break</button>
+          <button class="timer-tab"        data-mode="long-break"  role="tab" aria-selected="false">Long Break</button>
+        </div>
+
         <div class="timer-display" id="timer-display">25:00</div>
         <div class="timer-controls">
-          <button class="btn btn-primary" id="timer-start">Start</button>
+          <button class="btn btn-primary"   id="timer-start">Start</button>
           <button class="btn btn-secondary" id="timer-stop">Stop</button>
-          <button class="btn btn-ghost" id="timer-reset">Reset</button>
+          <button class="btn btn-ghost"     id="timer-reset">Reset</button>
         </div>
         <p class="timer-label" id="timer-label">Ready to focus?</p>
+
+        <!-- Settings panel (hidden by default) -->
+        <div class="timer-settings" id="timer-settings" hidden>
+          <h3 class="settings-title">Custom Durations (minutes)</h3>
+          <div class="settings-grid">
+            <label>Focus
+              <input type="number" id="set-focus"       class="settings-input" min="1" max="120" value="25" />
+            </label>
+            <label>Short Break
+              <input type="number" id="set-short-break" class="settings-input" min="1" max="60"  value="5"  />
+            </label>
+            <label>Long Break
+              <input type="number" id="set-long-break"  class="settings-input" min="1" max="120" value="15" />
+            </label>
+          </div>
+          <div class="settings-actions">
+            <button class="btn btn-primary btn-sm" id="settings-save">Apply</button>
+            <button class="btn btn-ghost   btn-sm" id="settings-cancel">Cancel</button>
+          </div>
+        </div>
       </section>
 
       <!-- ── TO-DO LIST ── -->
@@ -46,8 +95,20 @@
           <button type="submit" class="btn btn-primary">Add</button>
         </form>
 
-        <ul class="todo-list" id="todo-list" aria-live="polite"></ul>
+        <!-- Sort controls -->
+        <div class="sort-row">
+          <label for="sort-select" class="sort-label">Sort:</label>
+          <select id="sort-select" class="sort-select" aria-label="Sort tasks">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="az">A → Z</option>
+            <option value="za">Z → A</option>
+            <option value="done-first">Completed First</option>
+            <option value="undone-first">Incomplete First</option>
+          </select>
+        </div>
 
+        <ul class="todo-list" id="todo-list" aria-live="polite"></ul>
         <p class="todo-empty" id="todo-empty">No tasks yet. Add one above!</p>
       </section>
 
@@ -56,26 +117,12 @@
         <h2 class="card-title">Quick Links</h2>
 
         <form class="link-form" id="link-form" autocomplete="off">
-          <input
-            type="text"
-            id="link-name"
-            class="link-input"
-            placeholder="Label (e.g. GitHub)"
-            maxlength="30"
-            aria-label="Link label"
-          />
-          <input
-            type="url"
-            id="link-url"
-            class="link-input"
-            placeholder="https://example.com"
-            aria-label="Link URL"
-          />
+          <input type="text" id="link-name" class="link-input" placeholder="Label (e.g. GitHub)" maxlength="30" aria-label="Link label" />
+          <input type="url"  id="link-url"  class="link-input" placeholder="https://example.com" aria-label="Link URL" />
           <button type="submit" class="btn btn-primary">Save</button>
         </form>
 
         <div class="links-grid" id="links-grid" aria-live="polite"></div>
-
         <p class="links-empty" id="links-empty">No links saved yet.</p>
       </section>
 
@@ -88,7 +135,7 @@
         <input type="text" id="modal-input" class="todo-input" maxlength="120" aria-label="Edit task text" />
         <div class="modal-actions">
           <button class="btn btn-primary" id="modal-save">Save</button>
-          <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+          <button class="btn btn-ghost"   id="modal-cancel">Cancel</button>
         </div>
       </div>
     </div>
